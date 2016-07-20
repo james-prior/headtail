@@ -41,8 +41,8 @@ from __future__ import print_function
 import sys
 from itertools import islice
 
-n_head_lines = 3
-n_tail_lines = 3
+n_head_lines = 10
+n_tail_lines = 10
 
 def do_file(f):
     f = iter(f)
