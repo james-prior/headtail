@@ -48,16 +48,18 @@ def do_file(f):
         print(line, end='')
 
     tail_lines = [None for _ in range(n_tail_lines)]
-    n = 0
-    for line in f:
-        tail_lines[n%n_tail_lines] = line
-        n += 1
+    for i, line in enumerate(f):
+        tail_lines[i%n_tail_lines] = line
+    try:
+        n = i + 1
+    except NameError:
+        return  # i is not defined because there are no tail lines, so quit.
 
     if n > n_tail_lines:
         print('...')
     for i in range(n - n_tail_lines, n):
         line = tail_lines[i%n_tail_lines]
-        if line is None:
+        if not line:
             continue
         print(line, end='')
 
