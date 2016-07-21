@@ -2,13 +2,14 @@
 
 '''
 NAME
-    ht - output the first and last lines of files
+    ht - (headtail) output the first and last lines of files
 
 SYNOPSIS
     ht [OPTION]... [FILE]...
 
-    Print the first and last 10 lines of each file.
+    Print the beginning and end of each file.
     Prints '...' for omitted lines.
+    Defaults to first 10 and last 10 lines.
     Standard input may be specified by - argument.
     If no file is specified, uses standard input.
 
