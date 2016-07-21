@@ -2,19 +2,19 @@
 
 '''
 NAME
-    ht - (headtail) output the first and last lines of files
+    ht - (headtail) output the beginning and ending of files
 
 SYNOPSIS
     ht [OPTION]... [FILE]...
 
-    Print the beginning and end of each file.
+    Print the beginning and ending of each file.
     Prints '...' for omitted lines.
     Defaults to first 10 and last 10 lines.
     Standard input may be specified by - argument.
     If no file is specified, uses standard input.
 
-    Output header lines if more than one file.
-        Adds a line between output of multiple files.
+    Prints header lines if more than one file.
+        Prints a blank line between output of multiple files.
 
 OPTIONS
     -n, --lines=n
@@ -36,7 +36,7 @@ OPTIONS
         Show this and quit.
 
 EXAMPLES
-    ls -l ~ | ht -20
+    ls -ltr ~ | ht -20
         Shows first 20 and last 20 lines of output of previous command.
 
     ht --head-lines=1 --tail-lines=3 *.py
