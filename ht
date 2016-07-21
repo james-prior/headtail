@@ -9,7 +9,28 @@ SYNOPSIS
 
     Print the first and last 10 lines of each file.
     Standard input may be specified by - argument.
-    If no file is specified, use standard input. 
+    If no file is specified, use standard input.
+
+    Output header lines if more than one file or if
+
+OPTIONS
+    -n, --lines=n
+        Specify the number of lines from beginning and end of file to print.
+
+    --head-lines=n
+        Specify the number of lines from beginning of file to print.
+
+    --tail-lines=n
+        Specify the number of lines from end of file to print.
+
+    -v, --verbose
+        Print headers.
+
+    -q, --quiet, --silent
+        Do not print headers.
+
+    --help
+        Show this and quit.
 
 Copyright (c) 2016 James Prior
 
@@ -40,11 +61,6 @@ LICENSE
 
 todo
     add options (mostly same as head and tail)
-        limit head lines
-        limit tail lines
-        limit both head and tail lines
-        verbose?
-        specify files
     example uses
 '''
 
@@ -91,24 +107,39 @@ def main(argv, stdin):
     forbid_headers = False
     require_headers = False
 
-    number_argument_pattern = re.compile('^-(?P<n>\d+)$')
+    number_argument_pattern = re.compile('^(-|--lines=)(?P<n>\d+)$')
+    n_head_lines_pattern = re.compile('^--head-lines=(?P<n>\d+)$')
+    n_tail_lines_pattern = re.compile('^--tail-lines=(?P<n>\d+)$')
 
     filenames = []
     args = iter(argv[1:])
     for arg in args:
+        if arg == '--help':
+            print(__doc__)
+            return
         if arg == '-':
             filenames.append(arg)
             continue
-        if arg == '-v':
+        if arg in ('-v', '--verbose',):
             require_headers = True
             continue
-        if arg == '-q':
+        if arg in ('-q', '--quiet', '--silent'):
             forbid_headers = True
             continue
         m = re.match(number_argument_pattern, arg)
         if m:
             n = int(m.group('n'))
             n_head_lines = n
+            n_tail_lines = n
+            continue
+        m = re.match(n_head_lines_pattern, arg)
+        if m:
+            n = int(m.group('n'))
+            n_head_lines = n
+            continue
+        m = re.match(n_tail_lines_pattern, arg)
+        if m:
+            n = int(m.group('n'))
             n_tail_lines = n
             continue
         filenames.append(arg)
