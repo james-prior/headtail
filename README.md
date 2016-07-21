@@ -3,9 +3,11 @@ The ht command combines the
 and [tail](https://en.wikipedia.org/wiki/Tail_%28Unix%29) programs.
 
 NAME
+
     ht - (headtail) output the beginning and ending of files
 
 SYNOPSIS
+
     ht [OPTION]... [FILE]...
 
     Print the beginning and ending of each file.
@@ -18,6 +20,7 @@ SYNOPSIS
         Prints a blank line between output of multiple files.
 
 OPTIONS
+
     -n, --lines=n
         Specify the number of lines from beginning and end of file to print.
 
@@ -37,6 +40,7 @@ OPTIONS
         Show this and quit.
 
 EXAMPLES
+
     ls -ltr ~ | ht -20
         Shows first 20 and last 20 lines of output of previous command.
 
