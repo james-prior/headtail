@@ -8,10 +8,12 @@ SYNOPSIS
     ht [OPTION]... [FILE]...
 
     Print the first and last 10 lines of each file.
+    Prints '...' for omitted lines.
     Standard input may be specified by - argument.
-    If no file is specified, use standard input.
+    If no file is specified, uses standard input.
 
-    Output header lines if more than one file or if
+    Output header lines if more than one file.
+        Adds a line between output of multiple files.
 
 OPTIONS
     -n, --lines=n
@@ -32,7 +34,9 @@ OPTIONS
     --help
         Show this and quit.
 
-Copyright (c) 2016 James Prior
+EXAMPLES
+    git status | ht -20
+    ht --head-lines=1 --tail-lines=3 *.py
 
 LICENSE
 
@@ -60,7 +64,6 @@ LICENSE
     OTHER DEALINGS IN THE SOFTWARE.
 
 todo
-    add options (mostly same as head and tail)
     example uses
 '''
 
