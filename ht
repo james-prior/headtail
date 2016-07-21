@@ -35,8 +35,11 @@ OPTIONS
         Show this and quit.
 
 EXAMPLES
-    git status | ht -20
+    ls -l ~ | ht -20
+        Shows first 20 and last 20 lines of output of previous command.
+
     ht --head-lines=1 --tail-lines=3 *.py
+        Shows first line and last three lines of each *.py file.
 
 LICENSE
 
@@ -62,9 +65,6 @@ LICENSE
     WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
     FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
     OTHER DEALINGS IN THE SOFTWARE.
-
-todo
-    example uses
 '''
 
 from __future__ import print_function
