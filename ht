@@ -72,6 +72,7 @@ from __future__ import print_function
 import sys
 import re
 from itertools import islice
+from collections import deque
 
 def do_file(f, n_head_lines, n_tail_lines):
 
@@ -79,20 +80,11 @@ def do_file(f, n_head_lines, n_tail_lines):
     for line in islice(f, n_head_lines):
         print(line, end='')
 
-    tail_lines = [None for _ in range(n_tail_lines)]
-    for i, line in enumerate(f):
-        tail_lines[i%n_tail_lines] = line
-    try:
-        n = i + 1
-    except NameError:
-        return  # i is not defined because there are no tail lines, so quit.
-
-    if n > n_tail_lines:
+    tail_lines = deque(f, n_tail_lines+1)
+    if len(tail_lines) > n_tail_lines:
         print('...')
-    for i in range(n - n_tail_lines, n):
-        line = tail_lines[i%n_tail_lines]
-        if not line:
-            continue
+        tail_lines.popleft()
+    for line in tail_lines:
         print(line, end='')
 
 def show_header(show_filename, filename, i):
