@@ -11,14 +11,18 @@ SYNOPSIS
     Prints '...' for omitted lines.
     Defaults to first 10 and last 10 lines.
     Standard input may be specified by - argument.
-    If no file is specified, uses standard input.
+    If no files are specified, uses standard input.
 
     Prints header lines if more than one file.
         Prints a blank line between output of multiple files.
 
 OPTIONS
-    -n, --lines=n
+    n is a non-negative integer in the following options,
+    except for the first n in -n n.
+
+    -n, --lines=n, -n n
         Specify the number of lines from beginning and end of file to print.
+        In the -n n option, the first n is literal, the second is the number.
 
     --head-lines=n
         Specify the number of lines from beginning of file to print.
@@ -74,6 +78,8 @@ import re
 from itertools import islice
 from collections import deque
 
+DEFAULT_N_LINES = 10
+
 def do_file(f, n_head_lines, n_tail_lines):
 
     f = iter(f)
@@ -96,9 +102,8 @@ def show_header(show_filename, filename, i):
     print('==> %s <==' % filename)
 
 def main(argv, stdin):
-
-    n_head_lines = 10
-    n_tail_lines = 10
+    n_head_lines = DEFAULT_N_LINES
+    n_tail_lines = DEFAULT_N_LINES
 
     forbid_headers = False
     require_headers = False
@@ -121,6 +126,11 @@ def main(argv, stdin):
             continue
         if arg in ('-q', '--quiet', '--silent'):
             forbid_headers = True
+            continue
+        if arg == '-n':
+            n = int(next(args))
+            n_head_lines = n
+            n_tail_lines = n
             continue
         m = re.match(number_argument_pattern, arg)
         if m:
