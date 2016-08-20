@@ -80,8 +80,8 @@ from collections import deque
 
 DEFAULT_N_LINES = 10
 
-def do_file(f, n_head_lines, n_tail_lines):
 
+def do_file(f, n_head_lines, n_tail_lines):
     f = iter(f)
     for line in islice(f, n_head_lines):
         print(line, end='')
@@ -93,6 +93,7 @@ def do_file(f, n_head_lines, n_tail_lines):
     for line in tail_lines:
         print(line, end='')
 
+
 def show_header(show_filename, filename, i):
     if not show_filename:
         return
@@ -100,6 +101,7 @@ def show_header(show_filename, filename, i):
     if i > 0:
         print()
     print('==> %s <==' % filename)
+
 
 def main(argv, stdin):
     n_head_lines = DEFAULT_N_LINES
@@ -166,6 +168,7 @@ def main(argv, stdin):
             f = open(filename)
         show_header(show_headers, filename, i)
         do_file(f, n_head_lines, n_tail_lines)
+
 
 if __name__ == '__main__':
     main(sys.argv, sys.stdin)
