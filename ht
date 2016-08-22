@@ -103,16 +103,16 @@ def show_header(show_filename, filename, i):
     print('==> %s <==' % filename)
 
 
-def main(argv, stdin):
+def parse_arguments(argv):
     n_head_lines = DEFAULT_N_LINES
     n_tail_lines = DEFAULT_N_LINES
 
     forbid_headers = False
     require_headers = False
 
-    number_argument_pattern = re.compile('^(-|--lines=)(?P<n>\d+)$')
-    n_head_lines_pattern = re.compile('^--head-lines=(?P<n>\d+)$')
-    n_tail_lines_pattern = re.compile('^--tail-lines=(?P<n>\d+)$')
+    number_argument_pattern = re.compile(r'^(-|--lines=)(?P<n>\d+)$')
+    n_head_lines_pattern = re.compile(r'^--head-lines=(?P<n>\d+)$')
+    n_tail_lines_pattern = re.compile(r'^--tail-lines=(?P<n>\d+)$')
 
     filenames = []
     args = iter(argv[1:])
@@ -152,6 +152,7 @@ def main(argv, stdin):
             continue
         filenames.append(arg)
 
+
     assert not (forbid_headers and require_headers)
     show_headers = (
         (len(filenames) > 1 or require_headers)
@@ -159,6 +160,12 @@ def main(argv, stdin):
 
     if not filenames:
         filenames.append('-')
+
+    return n_head_lines, n_tail_lines, show_headers, filenames
+
+
+def main(argv, stdin):
+    n_head_lines, n_tail_lines, show_headers, filenames = parse_arguments(argv)
 
     for i, filename in enumerate(filenames):
         if filename == '-':
