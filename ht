@@ -92,7 +92,8 @@ def cli_arg_parser():
                         action='store_true',
                         help='Print headers')
     parser.add_argument('-q', '--quiet',
-                        action='store_true',
+                        action='store_false',
+                        dest='verbose',
                         help='Do not print headers.')
     parser.add_argument('-n', '--lines',
                         type=int,
@@ -112,11 +113,10 @@ def cli_arg_parser():
                         type=str,
                         nargs='*',
                         default=['-'],
-                        help='''    Print the beginning and ending of each file.
-                            Prints '...' for omitted lines.
-                            Defaults to first 10 and last 10 lines.
-                            Standard input may be specified by - argument.
-                            If no files are specified, uses standard input.''')
+                        help='''Print the beginning and ending of each file. Prints '...' for
+                                omitted lines. Defaults to first 10 and last 10 lines.
+                                Standard input may be specified by - argument.
+                                If no files are specified, uses standard input.''')
 
     return parser
 
@@ -205,15 +205,17 @@ def parse_arguments(argv):
 
 
 def main(argv, stdin):
-    n_head_lines, n_tail_lines, show_headers, filenames = parse_arguments(argv)
+    args = cli_arg_parser().parse_args(argv[1:])
+    n_head_lines = args.head_lines if args.head_lines is not None else args.lines
+    n_tail_lines = args.tail_lines if args.tail_lines is not None else args.lines
 
-    for i, filename in enumerate(filenames):
+    for i, filename in enumerate(args.filenames):
         if filename == '-':
             f = stdin
             filename = 'standard input'
         else:
             f = open(filename)
-        show_header(show_headers, filename, i)
+        show_header(args.verbose, filename, i)
         do_file(f, n_head_lines, n_tail_lines)
 
 
