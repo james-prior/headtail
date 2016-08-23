@@ -204,8 +204,26 @@ def parse_arguments(argv):
     return n_head_lines, n_tail_lines, show_headers, filenames
 
 
-def main(argv, stdin):
+def parse_command_line_args(argv):
+    """
+    Normalizes shorthand arguments and sends result to the parser
+    returned by cli_arg_parser(). This returns the resulting namespace
+    object.
+    """
+    # match the first shorthand lines argument (eg. -3) and expand to -n flag (-n3)
+    arg_re = re.compile(r'\-[0-9]+')
+    matching_args = (i for i, x in enumerate(argv) if arg_re.match(x))
+    # find first index matching the regex, or None
+    idx = next(matching_args, None)
+    if idx is not None:
+        # we have a match: substitute -X with -nX
+        argv[idx] = '-n' + argv[idx][1:]
     args = cli_arg_parser().parse_args(argv[1:])
+    return args
+
+
+def main(argv, stdin):
+    args = parse_command_line_args(argv)
     n_head_lines = args.head_lines if args.head_lines is not None else args.lines
     n_tail_lines = args.tail_lines if args.tail_lines is not None else args.lines
 
