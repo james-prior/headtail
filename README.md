@@ -2,6 +2,9 @@ The ht command combines the
 [head](https://en.wikipedia.org/wiki/Head_%28Unix%29)
 and [tail](https://en.wikipedia.org/wiki/Tail_%28Unix%29) programs.
 
+There are currently two versions, ht-ugly and ht-argparse.
+They should work the same. Copy whichever you like to ht and use ht.
+
 NAME
 
     ht - (headtail) output the beginning and ending of files
