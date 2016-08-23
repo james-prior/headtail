@@ -48,7 +48,7 @@ EXAMPLES
 
 LICENSE
 
-    Copyright (c) 2016 James Prior
+    Copyright (c) 2016 James Prior, Andrew Kubera
 
     Permission is hereby granted, free of charge, to any person
     obtaining a copy of this software and associated documentation
@@ -141,67 +141,6 @@ def show_header(show_filename, filename, i):
     if i > 0:
         print()
     print('==> %s <==' % filename)
-
-
-def parse_arguments(argv):
-    n_head_lines = DEFAULT_N_LINES
-    n_tail_lines = DEFAULT_N_LINES
-
-    forbid_headers = False
-    require_headers = False
-
-    number_argument_pattern = re.compile(r'^(-|--lines=)(?P<n>\d+)$')
-    n_head_lines_pattern = re.compile(r'^--head-lines=(?P<n>\d+)$')
-    n_tail_lines_pattern = re.compile(r'^--tail-lines=(?P<n>\d+)$')
-
-    filenames = []
-    args = iter(argv[1:])
-    for arg in args:
-        if arg == '--help':
-            print(__doc__)
-            return
-        if arg == '-':
-            filenames.append(arg)
-            continue
-        if arg in ('-v', '--verbose',):
-            require_headers = True
-            continue
-        if arg in ('-q', '--quiet', '--silent'):
-            forbid_headers = True
-            continue
-        if arg == '-n':
-            n = int(next(args))
-            n_head_lines = n
-            n_tail_lines = n
-            continue
-        m = re.match(number_argument_pattern, arg)
-        if m:
-            n = int(m.group('n'))
-            n_head_lines = n
-            n_tail_lines = n
-            continue
-        m = re.match(n_head_lines_pattern, arg)
-        if m:
-            n = int(m.group('n'))
-            n_head_lines = n
-            continue
-        m = re.match(n_tail_lines_pattern, arg)
-        if m:
-            n = int(m.group('n'))
-            n_tail_lines = n
-            continue
-        filenames.append(arg)
-
-
-    assert not (forbid_headers and require_headers)
-    show_headers = (
-        (len(filenames) > 1 or require_headers)
-        and not forbid_headers)
-
-    if not filenames:
-        filenames.append('-')
-
-    return n_head_lines, n_tail_lines, show_headers, filenames
 
 
 def parse_command_line_args(argv):
