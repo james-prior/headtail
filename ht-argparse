@@ -85,9 +85,10 @@ DEFAULT_N_LINES = 10
 
 def cli_arg_parser():
     '''Returns the command line ArgumentParser object'''
-    parser = ArgumentParser('ht',
-                            description='(headtail) output the beginning and ending of files',
-                            )
+    parser = ArgumentParser(
+        'ht',
+        description='(headtail) output the beginning and ending of files',
+    )
     parser.add_argument('-v', '--verbose',
                         action='store_true',
                         help='Print headers')
@@ -95,28 +96,32 @@ def cli_arg_parser():
                         action='store_false',
                         dest='verbose',
                         help='Do not print headers.')
-    parser.add_argument('-n', '--lines',
-                        type=int,
-                        default=10,
-                        help='Specify the number of lines from beginning and end of file to '
-                             'print. In the -n n option, the first n is literal, the second '
-                             'is the number.')
-    parser.add_argument('--head-lines',
-                        type=int,
-                        nargs='?',
-                        help='Specify the number of lines from beginning of file to print.')
-    parser.add_argument('--tail-lines',
-                        type=int,
-                        nargs='?',
-                        help='Specify the number of lines from end of file to print.')
-    parser.add_argument('filenames',
-                        type=str,
-                        nargs='*',
-                        default=['-'],
-                        help='''Print the beginning and ending of each file. Prints '...' for
-                                omitted lines. Defaults to first 10 and last 10 lines.
-                                Standard input may be specified by - argument.
-                                If no files are specified, uses standard input.''')
+    parser.add_argument(
+        '-n', '--lines',
+        type=int,
+        default=10,
+        help='Specify the number of lines from beginning and end of file to '
+        'print. In the -n n option, the first n is literal, the second '
+        'is the number.')
+    parser.add_argument(
+        '--head-lines',
+        type=int,
+        nargs='?',
+        help='Specify the number of lines from beginning of file to print.')
+    parser.add_argument(
+        '--tail-lines',
+        type=int,
+        nargs='?',
+        help='Specify the number of lines from end of file to print.')
+    parser.add_argument(
+        'filenames',
+        type=str,
+        nargs='*',
+        default=['-'],
+        help='''Print the beginning and ending of each file. Prints '...' for
+        omitted lines. Defaults to first 10 and last 10 lines.
+        Standard input may be specified by - argument.
+        If no files are specified, uses standard input.''')
 
     return parser
 
@@ -149,7 +154,8 @@ def parse_command_line_args(argv):
     returned by cli_arg_parser(). This returns the resulting namespace
     object.
     """
-    # match the first shorthand lines argument (eg. -3) and expand to -n flag (-n3)
+    # Match the first shorthand lines argument (eg. -3)
+    # and expand to -n flag (-n3).
     arg_re = re.compile(r'\-[0-9]+')
     matching_args = (i for i, x in enumerate(argv) if arg_re.match(x))
     # find first index matching the regex, or None
@@ -163,8 +169,10 @@ def parse_command_line_args(argv):
 
 def main(argv, stdin):
     args = parse_command_line_args(argv)
-    n_head_lines = args.head_lines if args.head_lines is not None else args.lines
-    n_tail_lines = args.tail_lines if args.tail_lines is not None else args.lines
+    n_head_lines = (
+        args.head_lines if args.head_lines is not None else args.lines)
+    n_tail_lines = (
+        args.tail_lines if args.tail_lines is not None else args.lines)
 
     for i, filename in enumerate(args.filenames):
         if filename == '-':
