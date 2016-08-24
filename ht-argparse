@@ -89,13 +89,15 @@ def cli_arg_parser():
         'ht',
         description='(headtail) output the beginning and ending of files',
     )
-    parser.add_argument('-v', '--verbose',
-                        action='store_true',
-                        help='Print headers')
-    parser.add_argument('-q', '--quiet',
-                        action='store_false',
-                        dest='verbose',
-                        help='Do not print headers.')
+    group = parser.add_mutually_exclusive_group()
+    group.add_argument(
+        '-v', '--verbose',
+        action='store_true',
+        help='Print headers')
+    group.add_argument(
+        '-q', '--quiet',
+        action='store_true',
+        help='Do not print headers.')
     parser.add_argument(
         '-n', '--lines',
         type=int,
@@ -164,11 +166,15 @@ def parse_command_line_args(argv):
         # we have a match: substitute -X with -nX
         argv[idx] = '-n' + argv[idx][1:]
     args = cli_arg_parser().parse_args(argv[1:])
-    return args
+    show_headers = (
+        (len(args.filenames) > 1 or args.verbose)
+        and not args.quiet
+        )
+    return show_headers, args
 
 
 def main(argv, stdin):
-    args = parse_command_line_args(argv)
+    show_headers, args = parse_command_line_args(argv)
     n_head_lines = (
         args.head_lines if args.head_lines is not None else args.lines)
     n_tail_lines = (
@@ -180,7 +186,7 @@ def main(argv, stdin):
             filename = 'standard input'
         else:
             f = open(filename)
-        show_header(args.verbose, filename, i)
+        show_header(show_headers, filename, i)
         do_file(f, n_head_lines, n_tail_lines)
 
 
