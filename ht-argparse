@@ -79,14 +79,15 @@ import sys
 from itertools import islice
 from collections import deque
 from argparse import ArgumentParser
+from os.path import basename
 
 DEFAULT_N_LINES = 10
 
 
-def cli_arg_parser():
+def cli_arg_parser(program_path):
     '''Returns the command line ArgumentParser object'''
     parser = ArgumentParser(
-        'ht',
+        basename(program_path),
         description='(headtail) output the beginning and ending of files',
     )
     group = parser.add_mutually_exclusive_group()
@@ -156,16 +157,19 @@ def parse_command_line_args(argv):
     returned by cli_arg_parser(). This returns the resulting namespace
     object.
     """
+    # program_path, *other_args = argv # Python 3
+    program_path = argv[0]
+    other_args = argv[1:]
     # Match the first shorthand lines argument (eg. -3)
     # and expand to -n flag (-n3).
     arg_re = re.compile(r'\-[0-9]+')
-    matching_args = (i for i, x in enumerate(argv) if arg_re.match(x))
+    matching_args = (i for i, x in enumerate(other_args) if arg_re.match(x))
     # find first index matching the regex, or None
     idx = next(matching_args, None)
     if idx is not None:
         # we have a match: substitute -X with -nX
-        argv[idx] = '-n' + argv[idx][1:]
-    args = cli_arg_parser().parse_args(argv[1:])
+        other_args[idx] = '-n' + other_args[idx][1:]
+    args = cli_arg_parser(program_path).parse_args(other_args)
     show_headers = (
         (len(args.filenames) > 1 or args.verbose)
         and not args.quiet
