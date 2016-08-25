@@ -103,9 +103,12 @@ def cli_arg_parser(program_path):
         '-n', '--lines',
         type=int,
         default=10,
-        help='Specify the number of lines from beginning and end of file to '
-        'print. In the -n n option, the first n is literal, the second '
-        'is the number.')
+        help=(
+            'Specify the number of lines '
+            'from beginning and end of file to print. '
+            'In the -n n option, the first n is literal, '
+            'the second is the number.')
+        )
     parser.add_argument(
         '--head-lines',
         type=int,
