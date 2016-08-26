@@ -11,14 +11,18 @@ SYNOPSIS
     Prints '...' for omitted lines.
     Defaults to first 10 and last 10 lines.
     Standard input may be specified by - argument.
-    If no file is specified, uses standard input.
+    If no files are specified, uses standard input.
 
     Prints header lines if more than one file.
         Prints a blank line between output of multiple files.
 
 OPTIONS
-    -n, --lines=n
+    n is a non-negative integer in the following options,
+    except for the first n in -n n.
+
+    -n, --lines=n, -n n
         Specify the number of lines from beginning and end of file to print.
+        In the -n n option, the first n is literal, the second is the number.
 
     --head-lines=n
         Specify the number of lines from beginning of file to print.
@@ -66,8 +70,6 @@ LICENSE
     WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
     FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
     OTHER DEALINGS IN THE SOFTWARE.
-
-**Using Argparse**
 '''
 
 from __future__ import print_function
@@ -83,7 +85,6 @@ DEFAULT_N_LINES = 10
 
 
 def do_file(f, n_head_lines, n_tail_lines):
-
     f = iter(f)
     for line in islice(f, n_head_lines):
         print(line, end='')
@@ -95,6 +96,7 @@ def do_file(f, n_head_lines, n_tail_lines):
     for line in tail_lines:
         print(line, end='')
 
+
 def show_header(show_filename, filename, i):
     if not show_filename:
         return
@@ -102,6 +104,7 @@ def show_header(show_filename, filename, i):
     if i > 0:
         print()
     print('==> %s <==' % filename)
+
 
 def main():
     """
@@ -233,6 +236,7 @@ SYNOPSIS
             f = filename
         show_header(show_headers, filename, i)
         do_file(f, n_head_lines, n_tail_lines)
+
 
 if __name__ == '__main__':
     main()
