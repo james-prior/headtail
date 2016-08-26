@@ -1,0 +1,178 @@
+#!/usr/bin/python
+
+'''head and tail print
+
+Usage:
+    ht [--verbose | --quiet] [--head-lines=<n>] [--tail-lines=<n>] [<file>] [<file>]...
+    ht [--verbose | --silent] [--head-lines=<n>] [--tail-lines=<n>] [<file>] [
+    <file>]...
+    ht [--lines=<n>] [--verbose | --quiet] [<file>] [<file>]...
+    ht [--verbose | --quiet] [<file>] [<file>]...
+    ht -h | --help
+    ht --version
+
+Options:
+    -n, --lines=n         Specify the number of lines from beginning and end of file to print. [default: 10]
+    --head-lines=n        Specify the number of lines from beginning of file to print. [default: 10]
+    --tail-lines=n        Specify the number of lines from end of file to print. [default: 10]
+    -v, --verbose         Print headers.
+    -q --quiet --silent   Do not print headers.
+    -h --help             Show this and quit.
+'''
+# '''
+#
+# NAME
+#     ht - (headtail) output the beginning and ending of files
+#
+# SYNOPSIS
+#
+#     ht [OPTION]... [FILE]...
+#
+#     Print the beginning and ending of each file.
+#     Prints '...' for omitted lines.
+#     Defaults to first 10 and last 10 lines.
+#     Standard input may be specified by - argument.
+#     If no file is specified, uses standard input.
+#
+#     Prints header lines if more than one file.
+#         Prints a blank line between output of multiple files.
+#
+# OPTIONS
+#     -n, --lines=n
+#         Specify the number of lines from beginning and end of file to print.
+#
+#     --head-lines=n
+#         Specify the number of lines from beginning of file to print.
+#
+#     --tail-lines=n
+#         Specify the number of lines from end of file to print.
+#
+#     -v, --verbose
+#         Print headers.
+#
+#     -q, --quiet, --silent
+#         Do not print headers.
+#
+#     --help
+#         Show this and quit.
+#
+# EXAMPLES
+#     ls -ltr ~ | ht -20
+#         Shows first 20 and last 20 lines of output of previous command.
+#
+#     ht --head-lines=1 --tail-lines=3 *.py
+#         Shows first line and last three lines of each *.py file.
+#
+# LICENSE
+#
+#     Copyright (c) 2016 James Prior
+#
+#     Permission is hereby granted, free of charge, to any person
+#     obtaining a copy of this software and associated documentation
+#     files (the "Software"), to deal in the Software without
+#     restriction, including without limitation the rights to use,
+#     copy, modify, merge, publish, distribute, sublicense, and/or sell
+#     copies of the Software, and to permit persons to whom the
+#     Software is furnished to do so, subject to the following
+#     conditions:
+#
+#     The above copyright notice and this permission notice shall be
+#     included in all copies or substantial portions of the Software.
+#
+#     THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+#     EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+#     OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+#     NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+#     HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+#     WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+#     FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+#     OTHER DEALINGS IN THE SOFTWARE.
+# ht - -lines = 5 *.py
+# ht - -head - lines = 4 - -tail - lines = 6 *.txt
+# ls - ltr | ht - v
+# ht - -help
+# '''
+
+from __future__ import print_function
+from sys import stdin
+# import re
+from itertools import islice
+from collections import deque
+from docopt import docopt
+
+
+def do_file(f, n_head_lines, n_tail_lines):
+
+    f = iter(f)
+    for line in islice(f, n_head_lines):
+        print(line, end='')
+
+    tail_lines = deque(f, n_tail_lines+1)
+    if len(tail_lines) > n_tail_lines:
+        print('...')
+        tail_lines.popleft()
+    for line in tail_lines:
+        print(line, end='')
+
+
+def show_header(show_filename, filename, i):
+    if not show_filename:
+        return
+
+    if i > 0:
+        print()
+    print('==> %s <==' % filename)
+
+
+def main(arguments):
+    """
+    Manage options for printing the head and the tail of files.
+
+    :param arguments: Arguments from the command line as interprested by docopt
+    :return:
+    """
+
+    # determine how many lines to print
+    n_lines = int(arguments['--lines'])
+    if n_lines != 10:
+        n_head_lines = n_lines
+        n_tail_lines = n_lines
+    else:
+        n_head_lines = int(arguments['--head-lines'])
+        n_tail_lines = int(arguments['--tail-lines'])
+
+    # determine what kind of headers to use
+    if arguments['--quiet'] is True or arguments['--silent'] is True:
+        no_headers = True
+    else:
+        no_headers = False
+    forbid_headers = no_headers
+    require_headers = arguments['--verbose']
+
+    filenames = arguments['<file>']
+
+    assert not (forbid_headers and require_headers)
+    show_headers = (
+        (len(filenames) > 1 or require_headers)
+        and not forbid_headers)
+
+    if not filenames:
+        filenames.append('-')
+
+    for i, filename in enumerate(filenames):
+        if filename == '-':
+            f = stdin
+            filename = 'standard input'
+        else:
+            f = open(filename)
+        show_header(show_headers, filename, i)
+        do_file(f, n_head_lines, n_tail_lines)
+
+if __name__ == '__main__':
+
+    arguments = docopt(__doc__, version='ht 1.0')
+    print('Parameters as interpreted by docopt')
+    print(arguments)
+    print('\n\n')
+
+    main(arguments)

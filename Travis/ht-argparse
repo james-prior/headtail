@@ -1,0 +1,282 @@
+#!/usr/bin/python
+
+'''
+NAME
+    ht - (headtail) output the beginning and ending of files
+
+SYNOPSIS
+    ht [OPTION]... [FILE]...
+
+    Print the beginning and ending of each file.
+    Prints '...' for omitted lines.
+    Defaults to first 10 and last 10 lines.
+    Standard input may be specified by - argument.
+    If no file is specified, uses standard input.
+
+    Prints header lines if more than one file.
+        Prints a blank line between output of multiple files.
+
+OPTIONS
+    -n, --lines=n
+        Specify the number of lines from beginning and end of file to print.
+
+    --head-lines=n
+        Specify the number of lines from beginning of file to print.
+
+    --tail-lines=n
+        Specify the number of lines from end of file to print.
+
+    -v, --verbose
+        Print headers.
+
+    -q, --quiet, --silent
+        Do not print headers.
+
+    --help
+        Show this and quit.
+
+EXAMPLES
+    ls -ltr ~ | ht -20
+        Shows first 20 and last 20 lines of output of previous command.
+
+    ht --head-lines=1 --tail-lines=3 *.py
+        Shows first line and last three lines of each *.py file.
+
+LICENSE
+
+    Copyright (c) 2016 James Prior
+
+    Permission is hereby granted, free of charge, to any person
+    obtaining a copy of this software and associated documentation
+    files (the "Software"), to deal in the Software without
+    restriction, including without limitation the rights to use,
+    copy, modify, merge, publish, distribute, sublicense, and/or sell
+    copies of the Software, and to permit persons to whom the
+    Software is furnished to do so, subject to the following
+    conditions:
+
+    The above copyright notice and this permission notice shall be
+    included in all copies or substantial portions of the Software.
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+    EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+    OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+    NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+    HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+    WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+    FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+    OTHER DEALINGS IN THE SOFTWARE.
+
+**Using Argparse**
+'''
+
+from __future__ import print_function
+
+import argparse
+from sys import stdin
+from itertools import islice
+from collections import deque
+from argparse import ArgumentParser
+
+import parser
+
+
+def do_file(f, n_head_lines, n_tail_lines):
+
+    f = iter(f)
+    for line in islice(f, n_head_lines):
+        print(line, end='')
+
+    tail_lines = deque(f, n_tail_lines+1)
+    if len(tail_lines) > n_tail_lines:
+        print('...')
+        tail_lines.popleft()
+    for line in tail_lines:
+        print(line, end='')
+
+def show_header(show_filename, filename, i):
+    if not show_filename:
+        return
+
+    if i > 0:
+        print()
+    print('==> %s <==' % filename)
+
+def main():
+    """
+    Produce the first and last few lines of a file.
+
+    :return:
+    """
+    # define some defaults to use in parsing
+    default_head_lines = '10'
+    default_tail_lines = '10'
+    default_both_lines = '10'
+    default_verbose_mode = False
+    default_quiet_mode = False
+    default_help_mode = False
+
+    # argument parser info
+    my_parser = argparse.ArgumentParser(
+        description='Print tne beginning and ending of each file.',
+        epilog='''
+SYNOPSIS
+    ht [OPTION]... [FILE]...
+
+    Print the beginning and ending of each file.
+    Prints '...' for omitted lines.
+    Defaults to first 10 and last 10 lines.
+    Standard input may be specified by - argument.
+    If no file is specified, uses standard input.
+
+    Prints header lines if more than one file.
+        Prints a blank line between output of multiple files.
+        '''
+    )
+
+    # --lines
+    my_parser.add_argument(
+        '--lines', '-n', nargs=1, type=int, default=default_both_lines,
+        help='Specify the number of lines from beginning and end of file to '
+             'print.'
+        )
+    # --head-lines
+    my_parser.add_argument(
+        '--head-lines', nargs=1, type=int, default=default_head_lines,
+        help='Specify the number of lines from beginning of file to print.'
+    )
+    # --tail-lines
+    my_parser.add_argument(
+        '--tail-lines', '-t', nargs=1, type=int, default=default_tail_lines,
+        help='Specify the number of lines from end of file to print.'
+    )
+    # --verbose
+    my_parser.add_argument(
+        '-v', '--verbose',  default=default_verbose_mode,
+        help='Print headers.'
+    )
+    # --quiet
+    my_parser.add_argument(
+        '-q', '--quiet', '--silent', default=default_quiet_mode,
+        help='Do not print headers.'
+    )
+    # filenames
+    my_parser.add_argument(
+        'filenames', nargs='*', type=argparse.FileType('r'),
+        help='files to process (default is stdin)'
+    )
+
+    # obtain the arguments
+    my_args = my_parser.parse_args()
+
+    # extract the acguments into a dictionary
+    my_argdict = vars(my_args)
+
+    arg_head_lines_list = my_argdict.get('head_lines')
+    if isinstance(arg_head_lines_list, list):
+        arg_head_lines_text = arg_head_lines_list[0]
+    else:
+        arg_head_lines_text = arg_head_lines_list
+    arg_head_lines = int(arg_head_lines_text)
+
+    arg_tail_lines_list = my_argdict.get('tail_lines')
+    if isinstance(arg_tail_lines_list, list):
+        arg_tail_lines_text = arg_tail_lines_list[0]
+    else:
+        arg_tail_lines_text = arg_tail_lines_list
+    arg_tail_lines = int(arg_tail_lines_text)
+
+    arg_lines_list = my_argdict.get('lines')
+    if isinstance(arg_lines_list, list):
+        arg_lines_text = arg_lines_list[0]
+    else:
+        arg_lines_text = arg_lines_list
+    arg_lines = int(arg_lines_text)
+
+    arg_verbose_mode = my_argdict.get('verbose')
+    arg_quiet_mode = my_argdict.get('quiet')
+    arg_filenames = my_argdict.get('filenames')
+    # arg_help_mode = argdict.get('help')
+
+    # set overrides
+    if arg_lines != default_both_lines:
+        arg_head_lines = arg_lines
+        arg_tail_lines = arg_lines
+    if arg_verbose_mode:
+        arg_quiet_mode = False
+    # copy arg values to original variables
+    n_head_lines = arg_head_lines
+    n_tail_lines = arg_tail_lines
+    forbid_headers = arg_quiet_mode
+    require_headers = arg_verbose_mode
+    filenames = arg_filenames
+    # help_mode = arg_help_mode
+
+    # below is the original code for parsing  argv.
+
+    # n_head_lines = 10
+    # n_tail_lines = 10
+    #
+    # forbid_headers = False
+    # require_headers = False
+    #
+    # number_argument_pattern = re.compile('^(-|--lines=)(?P<n>\d+)$')
+    # n_head_lines_pattern = re.compile('^--head-lines=(?P<n>\d+)$')
+    # n_tail_lines_pattern = re.compile('^--tail-lines=(?P<n>\d+)$')
+    #
+    # filenames = []
+    # args = iter(argv[1:])
+    # for arg in args:
+    #     if arg == '--help':
+    #         print(__doc__)
+    #         return
+    #     if arg == '-':
+    #         filenames.append(arg)
+    #         continue
+    #     if arg in ('-v', '--verbose',):
+    #         require_headers = True
+    #         continue
+    #     if arg in ('-q', '--quiet', '--silent'):
+    #         forbid_headers = True
+    #         continue
+    #     m = re.match(number_argument_pattern, arg)
+    #     if m:
+    #         n = int(m.group('n'))
+    #         n_head_lines = n
+    #         n_tail_lines = n
+    #         continue
+    #     m = re.match(n_head_lines_pattern, arg)
+    #     if m:
+    #         n = int(m.group('n'))
+    #         n_head_lines = n
+    #         continue
+    #     m = re.match(n_tail_lines_pattern, arg)
+    #     if m:
+    #         n = int(m.group('n'))
+    #         n_tail_lines = n
+    #         continue
+    #     filenames.append(arg)
+
+    # if help_mode:
+    #     print(__doc__)
+    #     return
+    assert not (forbid_headers and require_headers)
+    show_headers = (
+        (len(filenames) > 1 or require_headers)
+        and not forbid_headers)
+
+    if not filenames:
+        filenames.append('-')
+
+    for i, filename in enumerate(filenames):
+        if filename == '-':
+            f = stdin
+            filename = 'standard input'
+        else:
+            # f = open(filename)
+            f = filename
+        show_header(show_headers, filename, i)
+        do_file(f, n_head_lines, n_tail_lines)
+
+if __name__ == '__main__':
+    main()
