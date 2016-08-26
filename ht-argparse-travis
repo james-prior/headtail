@@ -77,8 +77,9 @@ from sys import stdin
 from itertools import islice
 from collections import deque
 from argparse import ArgumentParser
-
 import parser
+
+DEFAULT_N_LINES = 10
 
 
 def do_file(f, n_head_lines, n_tail_lines):
@@ -109,9 +110,9 @@ def main():
     :return:
     """
     # define some defaults to use in parsing
-    default_head_lines = '10'
-    default_tail_lines = '10'
-    default_both_lines = '10'
+    default_head_lines = str(DEFAULT_N_LINES)
+    default_tail_lines = str(DEFAULT_N_LINES)
+    default_both_lines = str(DEFAULT_N_LINES)
     default_verbose_mode = False
     default_quiet_mode = False
     default_help_mode = False
