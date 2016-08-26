@@ -6,11 +6,14 @@ n="$1"
 shift
 
 seq "$n" | ./ht-ugly "$@" >good
-seq "$n" | ./ht-argparse "$@" >new
-if cmp -s good new; then
-    echo same
-else
-    echo different:
-    diff good new
-    cat new
-fi
+for ht_other in ht-argparse ht-argparse-travis ht-click ht-docopt; do
+    echo -n "testing ${ht_other} "
+    seq "$n" | ./"$ht_other" "$@" >new
+    if cmp -s good new; then
+        echo same
+    else
+        echo different:
+        diff good new
+        cat new
+    fi
+done
