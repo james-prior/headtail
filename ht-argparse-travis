@@ -212,51 +212,6 @@ SYNOPSIS
     filenames = arg_filenames
     # help_mode = arg_help_mode
 
-    # below is the original code for parsing  argv.
-
-    # n_head_lines = 10
-    # n_tail_lines = 10
-    #
-    # forbid_headers = False
-    # require_headers = False
-    #
-    # number_argument_pattern = re.compile('^(-|--lines=)(?P<n>\d+)$')
-    # n_head_lines_pattern = re.compile('^--head-lines=(?P<n>\d+)$')
-    # n_tail_lines_pattern = re.compile('^--tail-lines=(?P<n>\d+)$')
-    #
-    # filenames = []
-    # args = iter(argv[1:])
-    # for arg in args:
-    #     if arg == '--help':
-    #         print(__doc__)
-    #         return
-    #     if arg == '-':
-    #         filenames.append(arg)
-    #         continue
-    #     if arg in ('-v', '--verbose',):
-    #         require_headers = True
-    #         continue
-    #     if arg in ('-q', '--quiet', '--silent'):
-    #         forbid_headers = True
-    #         continue
-    #     m = re.match(number_argument_pattern, arg)
-    #     if m:
-    #         n = int(m.group('n'))
-    #         n_head_lines = n
-    #         n_tail_lines = n
-    #         continue
-    #     m = re.match(n_head_lines_pattern, arg)
-    #     if m:
-    #         n = int(m.group('n'))
-    #         n_head_lines = n
-    #         continue
-    #     m = re.match(n_tail_lines_pattern, arg)
-    #     if m:
-    #         n = int(m.group('n'))
-    #         n_tail_lines = n
-    #         continue
-    #     filenames.append(arg)
-
     # if help_mode:
     #     print(__doc__)
     #     return
