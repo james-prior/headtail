@@ -1,0 +1,137 @@
+#!/bin/sh
+
+./test-ht 19
+./test-ht 20
+./test-ht 21
+./test-ht 5 -3
+./test-ht 6 -3
+./test-ht 7 -3
+./test-ht 5 -n 3
+./test-ht 6 -n 3
+./test-ht 7 -n 3
+./test-ht 5 --lines=3
+./test-ht 6 --lines=3
+./test-ht 7 --lines=3
+./test-ht 2 --head-lines=3
+./test-ht 3 --head-lines=3
+./test-ht 4 --head-lines=3
+./test-ht 12 --head-lines=3
+./test-ht 13 --head-lines=3
+./test-ht 14 --head-lines=3
+./test-ht 2 --tail-lines=3
+./test-ht 3 --tail-lines=3
+./test-ht 4 --tail-lines=3
+./test-ht 12 --tail-lines=3
+./test-ht 13 --tail-lines=3
+./test-ht 14 --tail-lines=3
+./test-ht 2 --head-lines=3 --tail-lines=5
+./test-ht 3 --head-lines=3 --tail-lines=5
+./test-ht 4 --head-lines=3 --tail-lines=5
+./test-ht 5 --head-lines=3 --tail-lines=5
+./test-ht 6 --head-lines=3 --tail-lines=5
+./test-ht 7 --head-lines=3 --tail-lines=5
+./test-ht 8 --head-lines=3 --tail-lines=5
+./test-ht 9 --head-lines=3 --tail-lines=5
+
+./test-ht 19 -v
+./test-ht 20 -v
+./test-ht 21 -v
+./test-ht 5 -v -3
+./test-ht 6 -v -3
+./test-ht 7 -v -3
+./test-ht 5 -v -n 3
+./test-ht 6 -v -n 3
+./test-ht 7 -v -n 3
+./test-ht 5 -v --lines=3
+./test-ht 6 -v --lines=3
+./test-ht 7 -v --lines=3
+./test-ht 2 -v --head-lines=3
+./test-ht 3 -v --head-lines=3
+./test-ht 4 -v --head-lines=3
+./test-ht 12 -v --head-lines=3
+./test-ht 13 -v --head-lines=3
+./test-ht 14 -v --head-lines=3
+./test-ht 2 -v --tail-lines=3
+./test-ht 3 -v --tail-lines=3
+./test-ht 4 -v --tail-lines=3
+./test-ht 12 -v --tail-lines=3
+./test-ht 13 -v --tail-lines=3
+./test-ht 14 -v --tail-lines=3
+./test-ht 2 -v --head-lines=3 --tail-lines=5
+./test-ht 3 -v --head-lines=3 --tail-lines=5
+./test-ht 4 -v --head-lines=3 --tail-lines=5
+./test-ht 5 -v --head-lines=3 --tail-lines=5
+./test-ht 6 -v --head-lines=3 --tail-lines=5
+./test-ht 7 -v --head-lines=3 --tail-lines=5
+./test-ht 8 -v --head-lines=3 --tail-lines=5
+./test-ht 9 -v --head-lines=3 --tail-lines=5
+
+./test-ht 19 ht-ugly ht-argparse
+./test-ht 20 ht-ugly ht-argparse
+./test-ht 21 ht-ugly ht-argparse
+./test-ht 5 -3 ht-ugly ht-argparse
+./test-ht 6 -3 ht-ugly ht-argparse
+./test-ht 7 -3 ht-ugly ht-argparse
+./test-ht 5 -n 3 ht-ugly ht-argparse
+./test-ht 6 -n 3 ht-ugly ht-argparse
+./test-ht 7 -n 3 ht-ugly ht-argparse
+./test-ht 5 --lines=3 ht-ugly ht-argparse
+./test-ht 6 --lines=3 ht-ugly ht-argparse
+./test-ht 7 --lines=3 ht-ugly ht-argparse
+./test-ht 2 --head-lines=3 ht-ugly ht-argparse
+./test-ht 3 --head-lines=3 ht-ugly ht-argparse
+./test-ht 4 --head-lines=3 ht-ugly ht-argparse
+./test-ht 12 --head-lines=3 ht-ugly ht-argparse
+./test-ht 13 --head-lines=3 ht-ugly ht-argparse
+./test-ht 14 --head-lines=3 ht-ugly ht-argparse
+./test-ht 2 --tail-lines=3 ht-ugly ht-argparse
+./test-ht 3 --tail-lines=3 ht-ugly ht-argparse
+./test-ht 4 --tail-lines=3 ht-ugly ht-argparse
+./test-ht 12 --tail-lines=3 ht-ugly ht-argparse
+./test-ht 13 --tail-lines=3 ht-ugly ht-argparse
+./test-ht 14 --tail-lines=3 ht-ugly ht-argparse
+./test-ht 2 --head-lines=3 --tail-lines=5 ht-ugly ht-argparse
+./test-ht 3 --head-lines=3 --tail-lines=5 ht-ugly ht-argparse
+./test-ht 4 --head-lines=3 --tail-lines=5 ht-ugly ht-argparse
+./test-ht 5 --head-lines=3 --tail-lines=5 ht-ugly ht-argparse
+./test-ht 6 --head-lines=3 --tail-lines=5 ht-ugly ht-argparse
+./test-ht 7 --head-lines=3 --tail-lines=5 ht-ugly ht-argparse
+./test-ht 8 --head-lines=3 --tail-lines=5 ht-ugly ht-argparse
+./test-ht 9 --head-lines=3 --tail-lines=5 ht-ugly ht-argparse
+
+./test-ht 20 -3 ./-3seq
+./test-ht 20 -3 -3seq
+
+./test-ht 19 -v ht-ugly ht-argparse
+./test-ht 20 -v ht-ugly ht-argparse
+./test-ht 21 -v ht-ugly ht-argparse
+./test-ht 5 -v -3 ht-ugly ht-argparse
+./test-ht 6 -v -3 ht-ugly ht-argparse
+./test-ht 7 -v -3 ht-ugly ht-argparse
+./test-ht 5 -v -n 3 ht-ugly ht-argparse
+./test-ht 6 -v -n 3 ht-ugly ht-argparse
+./test-ht 7 -v -n 3 ht-ugly ht-argparse
+./test-ht 5 -v --lines=3 ht-ugly ht-argparse
+./test-ht 6 -v --lines=3 ht-ugly ht-argparse
+./test-ht 7 -v --lines=3 ht-ugly ht-argparse
+./test-ht 2 -v --head-lines=3 ht-ugly ht-argparse
+./test-ht 3 -v --head-lines=3 ht-ugly ht-argparse
+./test-ht 4 -v --head-lines=3 ht-ugly ht-argparse
+./test-ht 12 -v --head-lines=3 ht-ugly ht-argparse
+./test-ht 13 -v --head-lines=3 ht-ugly ht-argparse
+./test-ht 14 -v --head-lines=3 ht-ugly ht-argparse
+./test-ht 2 -v --tail-lines=3 ht-ugly ht-argparse
+./test-ht 3 -v --tail-lines=3 ht-ugly ht-argparse
+./test-ht 4 -v --tail-lines=3 ht-ugly ht-argparse
+./test-ht 12 -v --tail-lines=3 ht-ugly ht-argparse
+./test-ht 13 -v --tail-lines=3 ht-ugly ht-argparse
+./test-ht 14 -v --tail-lines=3 ht-ugly ht-argparse
+./test-ht 2 -v --head-lines=3 --tail-lines=5 ht-ugly ht-argparse
+./test-ht 3 -v --head-lines=3 --tail-lines=5 ht-ugly ht-argparse
+./test-ht 4 -v --head-lines=3 --tail-lines=5 ht-ugly ht-argparse
+./test-ht 5 -v --head-lines=3 --tail-lines=5 ht-ugly ht-argparse
+./test-ht 6 -v --head-lines=3 --tail-lines=5 ht-ugly ht-argparse
+./test-ht 7 -v --head-lines=3 --tail-lines=5 ht-ugly ht-argparse
+./test-ht 8 -v --head-lines=3 --tail-lines=5 ht-ugly ht-argparse
+./test-ht 9 -v --head-lines=3 --tail-lines=5 ht-ugly ht-argparse
+

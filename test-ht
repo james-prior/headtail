@@ -1,0 +1,16 @@
+#!/bin/sh
+
+echo -n "for $@, "
+
+n="$1"
+shift
+
+seq "$n" | ./ht-ugly "$@" >good
+seq "$n" | ./ht-argparse "$@" >new
+if cmp -s good new; then
+    echo same
+else
+    echo different:
+    diff good new
+    cat new
+fi
