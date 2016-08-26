@@ -154,6 +154,25 @@ def show_header(show_filename, filename, i):
     print('==> %s <==' % filename)
 
 
+def normalize_arguments(argv):
+    '''argparse does not handle arguments of the form -X
+    where X is an integer,
+    so this function converts the first argument of form -X
+    to be of the form -nX, which argparse can parse,
+    then returns all the arguments.'''
+
+    # Match the first shorthand lines argument (eg. -3)
+    # and expand to -n flag (-n3).
+    arg_re = re.compile(r'\-[0-9]+')
+    matching_args = (i for i, x in enumerate(argv) if arg_re.match(x))
+    # find first index matching the regex, or None
+    idx = next(matching_args, None)
+    if idx is not None:
+        # we have a match: substitute -X with -nX
+        argv[idx] = '-n' + argv[idx][1:]
+    return argv
+
+
 def parse_arguments(argv):
     """
     Normalizes shorthand arguments and sends result to the parser
@@ -164,17 +183,7 @@ def parse_arguments(argv):
     # program_path, *other_args = argv # Python 3
     program_path = argv[0]
     other_args = argv[1:]
-
-    # Match the first shorthand lines argument (eg. -3)
-    # and expand to -n flag (-n3).
-    arg_re = re.compile(r'\-[0-9]+')
-    matching_args = (i for i, x in enumerate(other_args) if arg_re.match(x))
-    # find first index matching the regex, or None
-    idx = next(matching_args, None)
-    if idx is not None:
-        # we have a match: substitute -X with -nX
-        other_args[idx] = '-n' + other_args[idx][1:]
-
+    other_args = normalize_arguments(other_args)
     args = cli_arg_parser(program_path).parse_args(other_args)
 
     show_headers = (
